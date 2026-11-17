@@ -3,7 +3,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import FileResponse
+
 import qrcode
 import os
 
@@ -34,18 +34,9 @@ async def generate(request: Request, url: str):
         qr.save(qr_file)
         
 
-@app.get("/download")
-async def download_qr():
-    file_path = "static/qr_codes/qr.png"
 
-    return FileResponse(
-        path=file_path,
-        filename="My_QR_Code.png",
-        media_type="image/png"
+    return templates.TemplateResponse(
+        request=request,
+        name="index.html",
+        context={"qr": "/static/qr_codes/qr.png"}
     )
-
-    # return templates.TemplateResponse(
-    #     request=request,
-    #     name="index.html",
-    #     context={"qr": "/static/qr_codes/qr.png"}
-    # )
